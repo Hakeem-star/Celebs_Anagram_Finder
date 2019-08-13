@@ -1,6 +1,9 @@
+//There are some issues with the filter method. Once you find it, you need 
 window.addEventListener('load', function () {
 
-    let celebAnagramFinder = function () {
+    //Listen for the click of the button
+    document.querySelector("#anagramSubmit").addEventListener("click", function () {
+
         //select the resultDivContainer element and empty it
         document.querySelectorAll(".resultDivContainer").forEach(function (el) {
             el.innerHTML = "";
@@ -9,10 +12,10 @@ window.addEventListener('load', function () {
         //write input value to anagram variable
         if (document.querySelector("#anagram").value.toUpperCase().includes(",")) {
             var anagram = document.querySelector("#anagram").value.toUpperCase().replace(/\s/g, '').split(',');
-            // console.log(anagram)
+            console.log(anagram)
         } else {
             var anagram = [document.querySelector("#anagram").value.toUpperCase().replace(/\s/g, '')]
-        };
+        }
 
         console.log(anagram)
 
@@ -20,7 +23,7 @@ window.addEventListener('load', function () {
         let proxyUrl = 'https://cors-anywhere.herokuapp.com/',
             targetUrl = 'https://celebritybucks.com/developers/export/JSON'
 
-        //API key for owlbot.info
+
         //123b690d60076e2469ffb435f1a4d82a186bf085
 
         //Fetch the json of celebs
@@ -34,7 +37,7 @@ window.addEventListener('load', function () {
 
             res.json().then(function (celebsFromApi) {
 
-                // celebsFromApi = {CelebrityValues: [{ name: "Serena Williams" },{ name: "Kacey Musgraves" }, { name: "Ivana Milicevic" } ] };
+               // celebsFromApi = {CelebrityValues: [{ name: "Serena Williams" },{ name: "Kacey Musgraves" }, { name: "Ivana Milicevic" } ] };
                 //debugger;
                 console.log("Celebs from API", celebsFromApi.CelebrityValues)
                 var obj = {};
@@ -109,12 +112,13 @@ window.addEventListener('load', function () {
                                 }
                             }
 
+
                             //Compare the 2 objects and count the amount of matches
                             // console.log(anagramLetterCount, ind)
                             let count = 0;
                             let totalCount = 0;
-                            console.log(anagramLetterCount, ind, Object.keys(ind).length, celebsFromApi.CelebrityValues[i].name.toUpperCase().replace(" ", ""))
-
+                            console.log(anagramLetterCount,ind,Object.keys(ind).length,celebsFromApi.CelebrityValues[i].name.toUpperCase().replace(" ", ""))
+                            
                             Object.keys(anagramLetterCount).forEach(function (indVal) {
                                 if (ind[indVal] === anagramLetterCount[indVal]) { //console.log(indVal, ind[indVal],anagramLetterCount[indVal] )
                                     count++;
@@ -122,19 +126,37 @@ window.addEventListener('load', function () {
                             });
 
                             console.log(count, anagram[k], Object.keys(ind).length)
-                            totalCount = ((count / Object.keys(anagramLetterCount).length) * 100).toFixed();
+                            totalCount = (count / Object.keys(anagramLetterCount).length) * 100
 
                             console.log(totalCount)
-                            //Control the threshold for what is shown in the results
                             if (totalCount >= 80) {
                                 if (!obj[anagram[k]]) {
                                     //Create an empty array is it doesn't
                                     obj[anagram[k]] = []
                                 }
                                 //Push the resulting Celeb and match rate to the obj object
-                                //obj.anagramName = [{Celeb Name: 90}]
-                                obj[anagram[k]].push({ [celebsFromApi.CelebrityValues[i].name]: totalCount + "%" });
+                                obj[anagram[k]].push({ [celebsFromApi.CelebrityValues[i].name]: totalCount });
                             }
+
+                            //After the loop for the anagram, we need to sum up all the matches and see what percentage matches the celeb name
+                            //Loop through the ind and sum up all the values, then check what percentage of the celebname that is
+                            //Sum of all the matches
+                            let matchedCount = Object.values(ind).reduce((a, b) => a + b, 0);
+                            //Calculate the percentage
+                            let matchedCountPercent = ((matchedCount / celebsFromApi.CelebrityValues[i].name.toUpperCase().replace(" ", "").length) * 100).toFixed();
+                            //Then write that result to the obj object as {Anagram name + - + Celeb Name: 90}
+
+                            //If the match rate is above 80%
+                            // if (matchedCountPercent > 99) {
+                            //     console.log(matchedCountPercent, ind, celebsFromApi.CelebrityValues[i].name.toUpperCase().replace(" ", ""))
+                            //     //Check if an obj currently exists with for that anagram                        
+                            //     if (!obj[anagram[k]]) {
+                            //         //Create an empty array is it doesn't
+                            //         obj[anagram[k]] = []
+                            //     }
+                            //     //Push the resulting Celeb and match rate to the obj object
+                            //     obj[anagram[k]].push({ [celebsFromApi.CelebrityValues[i].name]: matchedCountPercent });
+                            // }
                         }
                     }
                 }
@@ -144,7 +166,7 @@ window.addEventListener('load', function () {
                 let resultDivContain = document.createElement("div");
 
                 resultDivContain.className = "resultDivContainer";
-                if (Object.keys(obj).length === 0) {
+                Object.keys(obj).forEach(function (val) {
 
                     ///////////////////
                     //Write to DOM
@@ -156,57 +178,25 @@ window.addEventListener('load', function () {
                     let resulth4 = document.createElement("h4");
 
                     //Write the value of the anagram to the h4 on the page
-                    resulth4.innerText = "Nothing was found!";
+                    resulth4.innerText = val;
                     //append div and h4 to end of body
                     document.querySelector(".container.my-5").appendChild(resultDivContain).appendChild(resultDiv).appendChild(resulth4)
 
-
-                } else {
-                    Object.keys(obj).forEach(function (val) {
-
-                        ///////////////////
-                        //Write to DOM
-                        //////////////////
-
-                        let resultDiv = document.createElement("div");
-                        //console.log(resultDiv)
-                        resultDiv.className = "row resultEle";
-                        let resulth4 = document.createElement("h4");
-
-                        //Write the value of the anagram to the h4 on the page
-                        resulth4.innerText = val;
-                        //append div and h4 to end of body
-                        document.querySelector(".container.my-5").appendChild(resultDivContain).appendChild(resultDiv).appendChild(resulth4)
-
-                        //loop through array of matches
-                        obj[val].forEach(function (objVal) {
-                            let resultP = document.createElement("p");
-                            resultP.innerText = JSON.stringify(objVal);
-                            let resultDiv2 = document.createElement("div");
-                            resultDiv2.className = "row";
-                            document.querySelector(".container.my-5").appendChild(resultDivContain).appendChild(resultDiv2).appendChild(resultP)
-                            //resultDiv2.appendChild(resultP)
-                            //console.log(objVal)
-                        })
+                    //loop through array of matches
+                    obj[val].forEach(function (objVal) {
+                        let resultP = document.createElement("p");
+                        resultP.innerText = JSON.stringify(objVal);
+                        let resultDiv2 = document.createElement("div");
+                        resultDiv2.className = "row";
+                        document.querySelector(".container.my-5").appendChild(resultDivContain).appendChild(resultDiv2).appendChild(resultP)
+                        //resultDiv2.appendChild(resultP)
+                        //console.log(objVal)
                     })
-                }
-
-
+                    //console.log(Object.values(obj))
+                })
                 //throw new Error("Something went badly wrong!");
             })
         });
-    }
 
-
-    //Listen for the click of the button
-    document.getElementById("anagramSubmit").addEventListener("click", celebAnagramFinder);
-
-    //Listen for the enter key press in the Input element
-    document.getElementById("anagram").addEventListener("keyup", function (event) {
-        event.preventDefault();
-        if (event.keyCode === 13) {
-            document.getElementById("anagramSubmit").click();
-        }
     });
-
 });
