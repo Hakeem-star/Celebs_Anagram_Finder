@@ -5,7 +5,7 @@ window.addEventListener('load', function () {
         document.querySelectorAll(".resultDivContainer").forEach(function (el) {
             el.innerHTML = "";
         });
-
+        
         //write input value to anagram variable
         if (document.querySelector("#anagram").value.toUpperCase().includes(",")) {
             var anagram = document.querySelector("#anagram").value.toUpperCase().replace(/\s/g, '').split(',');
@@ -144,6 +144,7 @@ window.addEventListener('load', function () {
                 let resultDivContain = document.createElement("div");
 
                 resultDivContain.className = "resultDivContainer";
+                //If no matching results were found
                 if (Object.keys(obj).length === 0) {
 
                     ///////////////////
@@ -160,7 +161,7 @@ window.addEventListener('load', function () {
                     //append div and h4 to end of body
                     document.querySelector(".container.my-5").appendChild(resultDivContain).appendChild(resultDiv).appendChild(resulth4)
 
-
+                    //If results were found
                 } else {
                     Object.keys(obj).forEach(function (val) {
 
@@ -190,8 +191,6 @@ window.addEventListener('load', function () {
                         })
                     })
                 }
-
-
                 //throw new Error("Something went badly wrong!");
             })
         });
