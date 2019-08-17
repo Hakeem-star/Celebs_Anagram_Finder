@@ -1,17 +1,29 @@
 window.addEventListener('load', function () {
 
+    let anagram = "";
+
     let celebAnagramFinder = function () {
         //select the resultDivContainer element and empty it
         document.querySelectorAll(".resultDivContainer").forEach(function (el) {
             el.innerHTML = "";
         });
-        
+
         //write input value to anagram variable
         if (document.querySelector("#anagram").value.toUpperCase().includes(",")) {
-            var anagram = document.querySelector("#anagram").value.toUpperCase().replace(/\s/g, '').split(',');
+            //Create array from comma seperated anagram
+            anagram = document.querySelector("#anagram").value.toUpperCase().replace(/\s/g,'').split(',');
+
+            anagram.forEach(function(val,index){
+                anagram[index] = val.replace(/[^A-Z]/g,"");
+            })
             // console.log(anagram)
         } else {
-            var anagram = [document.querySelector("#anagram").value.toUpperCase().replace(/\s/g, '')]
+            //Place Anagram into Array
+            anagram = [document.querySelector("#anagram").value.toUpperCase().replace(/\s/g, '')]
+            
+            anagram.forEach(function(val,index){
+                anagram[index] = val.replace(/[^A-Z]/g,"");
+            })
         };
 
         console.log(anagram)
@@ -37,7 +49,7 @@ window.addEventListener('load', function () {
                 // celebsFromApi = {CelebrityValues: [{ name: "Serena Williams" },{ name: "Kacey Musgraves" }, { name: "Ivana Milicevic" } ] };
                 //debugger;
                 console.log("Celebs from API", celebsFromApi.CelebrityValues)
-                var obj = {};
+                let obj = {};
                 //Anagram to search for
                 /* var anagram = ["TRUMCDONALD", "SHAVERSINB", "SHAVERSINC", "SHAVERSINM", "SHAVERSINP", "HASTYMAREA", "HASTYMAREE", "HASTYMAREI",
                      "HASTYMAREL", "HASTYMAREN", "HASTYMAREO", "HASTYMARER", "HASTYMARES", "HASTYMARET", "HASTYMAREU", "SLIMSWINEAREAA",
@@ -51,7 +63,7 @@ window.addEventListener('load', function () {
                      "JEDIMATHST", "JEDIMATHSU"];
      */
                 //Go through the anagram array
-                for (var k = 0; k < anagram.length; k++) {
+                for (let k = 0; k < anagram.length; k++) {
                     //debugger;
                     //Count the occurances of letters within the current anagram
                     let anagramLetterCount = {};
@@ -63,24 +75,24 @@ window.addEventListener('load', function () {
                     //  console.log(anagramLetterCount)
 
                     //Split the anagram into an array of individual letters
-                    var splitAnagramToLetters = anagram[k].split("");
+                    let splitAnagramToLetters = anagram[k].split("");
                     // console.log(splitAnagramToLetters)
                     //[S,H,A,V,E,R,S,I,N]
 
                     //Iterate through that against a loop going through the resulting array of celebs - 
                     //For each resulting celeb, check the matching letters
-                    for (var i = 0; i < celebsFromApi.CelebrityValues.length; i++) {
+                    for (let i = 0; i < celebsFromApi.CelebrityValues.length; i++) {
 
                         //If the length of the word in the anagram array is the same as the name from the api call (with spaces removed)
                         //debugger;
-                        if (anagram[k].length === celebsFromApi.CelebrityValues[i].name.toUpperCase().replace(" ", "").length) {
+                        if (anagram[k].length === celebsFromApi.CelebrityValues[i].name.toUpperCase().replace(" ", "").replace(/[^A-Z]/g,"").length) {
 
                             //console.log(anagram[k], data.CelebrityValues[i].name.toUpperCase().replace(" ", ""))
                             //Make an empty object
-                            var ind = {};
+                            let ind = {};
 
                             //Iterate through the splitAnagramToLetters array 
-                            for (var l = 0; l < splitAnagramToLetters.length; l++) {
+                            for (let l = 0; l < splitAnagramToLetters.length; l++) {
 
                                 //ind[spl[l]] = data.CelebrityValues[i].name.toUpperCase().replace(" ", "").lastIndexOf(spl[l])
                                 // console.log("current Anagram", splitAnagramToLetters[l]);
@@ -113,7 +125,7 @@ window.addEventListener('load', function () {
                             // console.log(anagramLetterCount, ind)
                             let count = 0;
                             let totalCount = 0;
-                            console.log(anagramLetterCount, ind, Object.keys(ind).length, celebsFromApi.CelebrityValues[i].name.toUpperCase().replace(" ", ""))
+                            //console.log(anagramLetterCount, ind, Object.keys(ind).length, celebsFromApi.CelebrityValues[i].name.toUpperCase().replace(" ", ""))
 
                             Object.keys(anagramLetterCount).forEach(function (indVal) {
                                 if (ind[indVal] === anagramLetterCount[indVal]) { //console.log(indVal, ind[indVal],anagramLetterCount[indVal] )
@@ -121,10 +133,10 @@ window.addEventListener('load', function () {
                                 }
                             });
 
-                            console.log(count, anagram[k], Object.keys(ind).length)
+                            //console.log(count, anagram[k], Object.keys(ind).length)
                             totalCount = ((count / Object.keys(anagramLetterCount).length) * 100).toFixed();
 
-                            console.log(totalCount)
+                            //console.log(totalCount)
                             //Control the threshold for what is shown in the results
                             if (totalCount >= 80) {
                                 if (!obj[anagram[k]]) {
@@ -163,31 +175,78 @@ window.addEventListener('load', function () {
 
                     //If results were found
                 } else {
-                    Object.keys(obj).forEach(function (val) {
+                    ///////////////////
+                    //Write to DOM
+                    //////////////////
 
-                        ///////////////////
-                        //Write to DOM
-                        //////////////////
+                    //Create Table
+                    let resultTABLE = document.createElement("table");
+                    resultTABLE.className = "resultsTABLE table";
+                    resultTABLE.classList.add("mt-5")
+                    let resultTHEAD = document.createElement("thead");
+                    resultTHEAD.className = "thead-dark";
+                    let resultTR = document.createElement("tr");
+                    let resultThAnagram = document.createElement("th");
+                    resultThAnagram.setAttribute("scope", "col");
+                    resultThAnagram.innerText = "Anagram";
+                    let resultThName = document.createElement("th");
+                    resultThName.setAttribute("scope", "col");
+                    resultThName.innerText = "Name";
+                    let resultThMatch = document.createElement("th");
+                    resultThMatch.setAttribute("scope", "col");
+                    resultThMatch.innerText = "Match Rate";
+                    let resultTBODY = document.createElement("tbody");
 
-                        let resultDiv = document.createElement("div");
+
+
+                    let tableSetup = document.querySelector(".container.my-5")
+                        .appendChild(resultTABLE)
+                        .appendChild(resultTHEAD)
+                        .appendChild(resultTR)
+                        resultTABLE.appendChild(resultTBODY)
+                        resultTHEAD.appendChild(resultThAnagram)
+                        resultTHEAD.appendChild(resultThName)
+                        resultTHEAD.appendChild(resultThMatch)
+                    tableSetup;
+
+
+                    Object.keys(obj).forEach(function (val, index) {
+
+
+
                         //console.log(resultDiv)
-                        resultDiv.className = "row resultEle";
-                        let resulth4 = document.createElement("h4");
+                        // resultDiv.className = "row resultEle";
 
-                        //Write the value of the anagram to the h4 on the page
-                        resulth4.innerText = val;
-                        //append div and h4 to end of body
-                        document.querySelector(".container.my-5").appendChild(resultDivContain).appendChild(resultDiv).appendChild(resulth4)
+
+                        let resultAnagramTR = document.createElement("tr");
+                        resultAnagramTR.className = "anagram" + index;
+
+                        let resultAnagramTD = document.createElement("td");
+                        //anagram value
+                        resultAnagramTD.innerText = val;
+
+
+                        resultTBODY.appendChild(resultAnagramTR)
+                            .appendChild(resultAnagramTD);
 
                         //loop through array of matches
                         obj[val].forEach(function (objVal) {
-                            let resultP = document.createElement("p");
-                            resultP.innerText = JSON.stringify(objVal);
-                            let resultDiv2 = document.createElement("div");
+
+                            let resultCelebNameTD = document.createElement("td");
+                            let resultCelebMatchTD = document.createElement("td");
+
+                            resultCelebNameTD.innerText = Object.keys(objVal)[0];
+                            resultCelebMatchTD.innerText = Object.values(objVal)[0];
+
+                            resultAnagramTR.appendChild(resultCelebNameTD);
+                            resultAnagramTR.appendChild(resultCelebMatchTD);
+
+                          /*  let resultDiv2 = document.createElement("div");
                             resultDiv2.className = "row";
                             document.querySelector(".container.my-5").appendChild(resultDivContain).appendChild(resultDiv2).appendChild(resultP)
                             //resultDiv2.appendChild(resultP)
-                            //console.log(objVal)
+                            */
+                            console.log(objVal)
                         })
                     })
                 }
