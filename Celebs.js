@@ -7,7 +7,7 @@ window.addEventListener('load', function () {
         document.querySelectorAll(".resultDivContainer").forEach(function (el) {
             el.innerHTML = "";
         });
-
+        
         //write input value to anagram variable
         if (document.querySelector("#anagram").value.toUpperCase().includes(",")) {
             //Create array from comma seperated anagram
