@@ -1,0 +1,12 @@
+#tableFooter{
+    color: darkgray;
+    font-size: 1em;
+    background-color: #e4e5e7;
+
+}
+
+#tableFooter td{
+    padding: 4px 4px 4px 14px;
+    width: 33%;
+
+}

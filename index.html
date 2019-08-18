@@ -17,7 +17,7 @@
     <div class="container my-5">
 
         <div class="row">
-            <div class="mx-auto">
+            <div id="title" class="mx-auto">
                 <h1>Celebrity Anagram Finder</h1>
             </div>
         </div>
@@ -25,20 +25,21 @@
         <div class="row m-3">
             <div class="mx-auto">
                 <select name="anagramQuerySelect" id="anagramQuerySelect">
-                    <option value="Celebrities">Celebrities</option>
-                    <option value="General">General</option>
+                    <option selected="selected" class="celebrities" value="Celebrities">Celebrities</option>
+                    <option class="general" value="General">General</option>
 
                 </select>
             </div>
         </div>
-        <div class="mx-auto input-group col-lg-6 mt-5">
+
+        <div id="anagramInput" class="mx-auto input-group col-lg-6 mt-5">
 
             <div class="input-group-prepend">
                 <span class="input-group-text">Name</span>
             </div>
 
             <input id="anagram" type="text" aria-label="Anagram" class="form-control" aria-describedby="button-addon2"
-                required>
+                required value="Thanksmo,TRUMCDONALD,parsi/hl itno">
 
 
             <div class="input-group-append">
