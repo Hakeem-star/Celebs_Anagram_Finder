@@ -9,6 +9,9 @@ So you can input something like TRUMFDAONDL or Thanksmo,TRUMCDONALD,parsi/hl itn
 
 Special characters and spaces are also removed.
 
+![Celebs Anagram Finder](https://i.imgur.com/DOEB0y0.png)
+
+
 Upcoming features - 
 Build general anagram feature
 Improve UI
