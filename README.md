@@ -1,4 +1,4 @@
-# Celebs_Anagram_Finder
+# Celebs Anagram Finder
 This tool allows you to find the Celebrity in an anagram even if it includes some replaced letters(if they are in the database) e.g.TRUMFDAONDL
 
 It will return a result if there is at least an 80% match.
@@ -12,8 +12,9 @@ Special characters and spaces are also removed.
 ![Celebs Anagram Finder](https://i.imgur.com/DOEB0y0.png)
 
 
-Upcoming features - 
-  -Build general anagram feature
-  -Improve UI
-  -Include option to pick percentage threshold.
-  -Use Wikipedia API instead for larger database.
+Upcoming features
+
+  - Build general anagram feature
+  - Improve UI
+  - Include option to pick percentage threshold.
+  - Use Wikipedia API instead for larger database.
