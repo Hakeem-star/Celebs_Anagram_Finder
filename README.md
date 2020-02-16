@@ -13,7 +13,7 @@ Special characters and spaces are also removed.
 
 
 Upcoming features - 
-Build general anagram feature
-Improve UI
-Include option to pick percentage threshold.
-Use Wikipedia API instead for larger database.
+  -Build general anagram feature
+  -Improve UI
+  -Include option to pick percentage threshold.
+  -Use Wikipedia API instead for larger database.
